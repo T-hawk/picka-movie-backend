@@ -9,22 +9,22 @@ Rails.application.routes.draw do
 
       # Movie
 
-      get "/releases", to: "movie#releases"
-      get "/search", to: "movie#search"
+      #get "/releases", to: "movie#releases"
+      #get "/search", to: "movie#search"
 
       # Library
 
-      get "/library/movies/:library_id", to: "library#movies"
-      post "/library/add/:library_id", to: "library#add"
-      delete "/library/remove/:library_id", to: "library#delete"
+      #get "/library/movies/:library_id", to: "library#movies"
+      #post "/library/add/:library_id", to: "library#add"
+      #delete "/library/remove/:library_id", to: "library#delete"
 
       # Movie session
 
-      get "/session/movies/:session_id", to: "movie_session#movies"
-      get "/results/movies/:session_id", to: "movie_session#movies"
-      post "/session/create", to: "movie_session#create"
-      post "/session/stop/:session_id", to: "movie_session#stop"
-      post "/session/vote/:session_id", to: "movie_session#vote"
+      #get "/session/movies/:session_id", to: "movie_session#movies"
+      #get "/results/movies/:session_id", to: "movie_session#movies"
+      #post "/session/create", to: "movie_session#create"
+      #post "/session/stop/:session_id", to: "movie_session#stop"
+      #post "/session/vote/:session_id", to: "movie_session#vote"
 
 
     end
