@@ -1,0 +1,2 @@
+module MovieSessionHelper
+end
