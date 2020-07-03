@@ -1,5 +1,5 @@
 class PageController < ApplicationController
   def index
-    render plain: "hello world"
+    render "index"
   end
 end
