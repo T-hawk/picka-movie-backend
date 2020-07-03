@@ -9,8 +9,8 @@ Rails.application.routes.draw do
 
       # Movie
 
-      #get "/releases", to: "movie#releases"
-      #get "/search", to: "movie#search"
+      get "/releases", to: "movie#releases"
+      get "/search", to: "movie#search"
 
       # Library
 
