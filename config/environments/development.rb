@@ -3,7 +3,8 @@ Rails.application.configure do
 
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
-  # since you don't have to restart the web server when you make code changes.
+  # since you don't have t@o restart the web server when you make code changes.
+  config.cache_store = :redis_cache_store, { url: "redis://localhost:6379/0" }
   config.cache_classes = false
 
   # Do not eager load code on boot.
@@ -18,14 +19,12 @@ Rails.application.configure do
     config.action_controller.perform_caching = true
     config.action_controller.enable_fragment_cache_logging = true
 
-    config.cache_store = :memory_store
     config.public_file_server.headers = {
       'Cache-Control' => "public, max-age=#{2.days.to_i}"
     }
   else
     config.action_controller.perform_caching = false
 
-    config.cache_store = :null_store
   end
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
