@@ -12,11 +12,14 @@ class UserController < ApplicationController
 
   def create
     user = User.new(user_params)
-    if user.save
+
+    if user.save!
       token = helpers.gen_token
       user.token = token
       user.save
       render json: { user: user }
+    else
+      render json: { status: 401 }
     end
   end
 

@@ -10,7 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_02_194918) do
+ActiveRecord::Schema.define(version: 2020_07_04_195505) do
+
+  create_table "movie_refs", force: :cascade do |t|
+    t.integer "movie_session_id"
+    t.integer "tmdb_id"
+  end
+
+  create_table "movie_sessions", force: :cascade do |t|
+    t.integer "creator_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "share_token"
+  end
+
+  create_table "movie_votes", force: :cascade do |t|
+    t.integer "movie_session_id"
+    t.integer "tmdb_id"
+    t.integer "user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "name"
@@ -19,6 +37,7 @@ ActiveRecord::Schema.define(version: 2020_07_02_194918) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "token"
+    t.integer "movie_session_id"
   end
 
 end
