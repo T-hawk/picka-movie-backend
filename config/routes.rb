@@ -30,4 +30,5 @@ Rails.application.routes.draw do
   end
 
   get "/", to: "page#index"
+  get "/*path", to: "page#index"
 end
