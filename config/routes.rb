@@ -25,7 +25,7 @@ Rails.application.routes.draw do
       post "/session/create", to: "movie_session#create"
       post "/session/join", to: "movie_session#join"
       #post "/session/stop/:session_id", to: "movie_session#stop"
-      #post "/session/vote/:session_id", to: "movie_session#vote"
+      post "/session/vote/:movie_session_id", to: "movie_session#vote"
 
     end
   end

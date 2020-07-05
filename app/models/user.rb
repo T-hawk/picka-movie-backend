@@ -3,6 +3,4 @@ class User < ApplicationRecord
 
   validates_presence_of :name, :email
   validates_uniqueness_of :name, :email, :token
-
-  has_one :movie_session
 end
