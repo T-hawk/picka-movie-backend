@@ -20,7 +20,7 @@ Rails.application.routes.draw do
 
       # Movie session
 
-      #get "/session/movies/:session_id", to: "movie_session#movies"
+      get "/session/movies/:movie_session_id", to: "movie_session#movies"
       #get "/results/movies/:session_id", to: "movie_session#movies"
       post "/session/create", to: "movie_session#create"
       post "/session/join", to: "movie_session#join"

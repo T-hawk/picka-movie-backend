@@ -2,7 +2,6 @@ class Movie
   attr_accessor :title, :poster_path, :id
 
   def self.from_tmdb_movie(movie)
-    puts movie
     output = Movie.new(movie["title"], movie["poster_path"], movie["id"])
   end
 
