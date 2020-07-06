@@ -22,8 +22,4 @@ module MovieSessionHelper
 
     format_movies(movies, movie_session.id)
   end
-
-  def valid_user_and_movie_session?(user, movie_session)
-    user && movie_session && movie_session.users.include?(user)
-  end
 end
