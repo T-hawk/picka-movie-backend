@@ -8,10 +8,10 @@ module MovieSessionHelper
   end
 
   def format_movies(movies, movie_session_id)
+    votes = MovieVote.where(tmdb_id: movies.map(&:id), movie_session_id: movie_session_id)
     movies.map do |movie|
-      votes = MovieVote.where(tmdb_id: movie.id, movie_session_id: movie_session_id)
-      vote_count = votes ? votes.count : 0
-      { votes: vote_count, title: movie.title, poster_path: movie.poster_path, id: movie.id }
+      count = (votes.select {|vote| vote.tmdb_id == movie.id }).count
+      { votes: count, title: movie.title, poster_path: movie.poster_path, id: movie.id }
     end
   end
 

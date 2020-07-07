@@ -1,7 +1,7 @@
 class MovieSessionController < ApplicationController
 
   before_action :validate_user_in_session, :only => [:vote, :movies]
-  before_action :check_active, :except => [:create, :stop, :results]
+  before_action :check_active, :except => :create
 
   def movies
     render json: helpers.get_session_movies_with_votes(@movie_session)
@@ -23,10 +23,10 @@ class MovieSessionController < ApplicationController
       if movie_session.save
         render json: helpers.get_session_movies_with_votes(movie_session)
       else
-        render json: { error: "COULD NOT CREATE SESSION" }
+        render json: { status: 400 }
       end
     else
-      render json: { status: "INVALID USER OR MOVIE IDS" }
+      render json: { status: 400 }
     end
   end
 
@@ -34,7 +34,7 @@ class MovieSessionController < ApplicationController
     @movie_session = MovieSession.find_by(share_token: params[:share_token])
     @user = User.find_by(id: user_info[:id], token: user_info[:token])
 
-    if user && movie_session
+    if @user && @movie_session
       @movie_session.users << @user
 
       render json: helpers.get_session_movies_with_votes(@movie_session)
@@ -44,16 +44,33 @@ class MovieSessionController < ApplicationController
   end
 
   def vote
-    if user_voted?(@movie_session.id, @user.id)
-      MovieVote.where(movie_session_id: @movie_session.id, user_id: @user.id).destroy_all
-    end
+    MovieVote.where(movie_session_id: @movie_session.id, user_id: @user.id).destroy_all
 
     @movie_session.movie_votes.create(tmdb_id: params[:tmdb_id], user_id: @user.id)
 
     render json: helpers.get_session_movies_with_votes(@movie_session)
   end
 
-  def stop
+
+  def results
+    if !@movie_session.active
+      render json: { results: helpers.get_session_movies_with_votes(@movie_session) }
+    else
+      render json: { status: 400 }
+    end
+  end
+
+  private
+
+  def user_info
+    params.require(:user).permit(:id, :token)
+  end
+
+  def user_voted?(movie_session_id, user_id)
+    MovieVote.where(movie_session_id: movie_session_id, user_id: user_id).exists?
+  end
+
+  def stop_session
     @movie_session = MovieSession.find(params[:movie_session_id])
 
     top_voted = []
@@ -78,34 +95,14 @@ class MovieSessionController < ApplicationController
     redirect_to :action => :results
   end
 
-  def results
-    @movie_session = MovieSession.find(params[:movie_session_id])
-
-    if !@movie_session.active
-      render json: { results: helpers.get_session_movies_with_votes(@movie_session) }
-    else
-      render json: { status: "SESSION NOT ENDED"}
-    end
-  end
-
-  private
-
-  def user_info
-    params.require(:user).permit(:id, :token)
-  end
-
-  def user_voted?(movie_session_id, user_id)
-    MovieVote.where(movie_session_id: movie_session_id, user_id: user_id).exists?
-  end
-
   def check_active
     @movie_session = MovieSession.find(params[:movie_session_id])
 
     if (Time.now - @movie_session.closes_at) >= 0 && @movie_session.active
-      redirect_to :action => :stop
+      stop_session
     end
 
-    if !@movie_session.active
+    if !@movie_session.active && params[:action] != "results"
       redirect_to :action => :results
     end
   end
@@ -115,10 +112,10 @@ class MovieSessionController < ApplicationController
     @movie_session = MovieSession.find(params[:movie_session_id])
     if @user && @movie_session
       if !@movie_session.users.include? @user
-        render json: { error: "USER NOT IN SESSION"}
+        render json: { status: 403 }
       end
     else
-      render json: { error: "INVALID USER OR SESSION"}
+      render json: { status: 400 }
     end
   end
 end

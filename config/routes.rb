@@ -23,8 +23,7 @@ Rails.application.routes.draw do
       get "/session/movies/:movie_session_id", to: "movie_session#movies"
       get "/results/movies/:movie_session_id", to: "movie_session#results"
       post "/session/create", to: "movie_session#create"
-      post "/session/join", to: "movie_session#join"
-      post "/session/stop/:movie_session_id", to: "movie_session#stop"
+      post "/session/join/:movie_session_id", to: "movie_session#join"
       post "/session/vote/:movie_session_id", to: "movie_session#vote"
 
     end
