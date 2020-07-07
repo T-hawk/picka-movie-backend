@@ -14,9 +14,6 @@ class UserController < ApplicationController
     user = User.new(user_params)
 
     if user.save!
-      token = helpers.gen_token
-      user.token = token
-      user.save
       render json: { user: user }
     else
       render json: { status: 401 }
@@ -27,8 +24,7 @@ class UserController < ApplicationController
     user = User.find_by(email: user_params["email"]).try(:authenticate, user_params["password"])
 
     if user
-      token = helpers.gen_token
-      user.token = token
+      user.gen_token
       user.save
       render json: {
         user: user
