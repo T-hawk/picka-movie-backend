@@ -46,9 +46,12 @@ class MovieSessionController < ApplicationController
   def vote
     MovieVote.where(movie_session_id: @movie_session.id, user_id: @user.id).destroy_all
 
-    @movie_session.movie_votes.create(tmdb_id: params[:tmdb_id], user_id: @user.id)
-
-    render json: helpers.get_session_movies_with_votes(@movie_session)
+    if @movie_session.movie_refs.where(tmdb_id: params[:tmdb_id]).exists?
+      @movie_session.movie_votes.create(tmdb_id: params[:tmdb_id], user_id: @user.id)
+      render json: helpers.get_session_movies_with_votes(@movie_session)
+    else
+      render json: { status: 400 }
+    end
   end
 
 
@@ -113,7 +116,7 @@ class MovieSessionController < ApplicationController
 
   def validate_user_in_session
     @user = User.find_by(id: user_info[:id], token: user_info[:token])
-    @movie_session = MovieSession.find(params[:movie_session_id])
+    @movie_session = MovieSession.find_by(id: params[:movie_session_id])
     if @user && @movie_session
       if !@movie_session.users.include? @user
         render json: { status: 403 }
