@@ -1,5 +1,5 @@
 class MovieSession < ApplicationRecord
-  before_create :generate_token, :generate_closing_at
+  before_create :generate_token, :generate_closing_at, :add_creator_to_users
 
   has_many :users
   has_many :movie_refs
@@ -21,6 +21,10 @@ class MovieSession < ApplicationRecord
   def generate_closing_at
     self.active = true
     self.closes_at = Time.now + CLOSES_AT
+  end
+
+  def add_creator_to_users
+    self.users << self.creator
   end
 
 end

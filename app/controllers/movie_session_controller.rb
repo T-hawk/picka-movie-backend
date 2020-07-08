@@ -96,14 +96,18 @@ class MovieSessionController < ApplicationController
   end
 
   def check_active
-    @movie_session = MovieSession.find(params[:movie_session_id])
+    @movie_session = MovieSession.find_by(id: params[:movie_session_id])
 
-    if (Time.now - @movie_session.closes_at) >= 0 && @movie_session.active
-      stop_session
-    end
+    if @movie_session
+      if (Time.now - @movie_session.closes_at) >= 0 && @movie_session.active
+        stop_session
+      end
 
-    if !@movie_session.active && params[:action] != "results"
-      redirect_to :action => :results
+      if !@movie_session.active && params[:action] != "results"
+        redirect_to :action => :results
+      end
+    else
+      render json: { status: 400 }
     end
   end
 

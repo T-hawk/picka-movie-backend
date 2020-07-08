@@ -1,9 +1,11 @@
+require 'faker'
+
 FactoryBot.define do
   factory :user do
-    name {"Brad"}
-    email {"brad@gmail.com"}
-    password {"asdfasdf"}
-    password_confirmation {"asdfasdf"}
+    name { Faker::Name.name }
+    email { Faker::Internet.email }
+    password { "asdfasdf" }
+    password_confirmation { "asdfasdf" }
   end
 
   factory :invalid_user do
