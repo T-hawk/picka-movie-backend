@@ -6,12 +6,12 @@ FactoryBot.define do
     email { Faker::Internet.email }
     password { "asdfasdf" }
     password_confirmation { "asdfasdf" }
-  end
 
-  factory :invalid_user do
-    name {"Error"}
-    email {"error"}
-    password {"asdfasdf"}
-    password_confirmation {"sdfasdf"}
+    factory :invalid_user do
+      name {"Error"}
+      email {"error"}
+      password {"asdfasdf"}
+      password_confirmation {"sdfasdf"}
+    end
   end
 end

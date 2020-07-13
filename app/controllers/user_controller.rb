@@ -6,17 +6,17 @@ class UserController < ApplicationController
     if user
       render json: { user: user }
     else
-      render json: { status: 401 }
+      render json: { status: 401 }, status: 401
     end
   end
 
   def create
     user = User.new(user_params)
 
-    if user.save!
+    if user.save
       render json: { user: user }
     else
-      render json: { status: 401 }
+      render json: { status: 401 }, status: 401
     end
   end
 
@@ -24,17 +24,17 @@ class UserController < ApplicationController
     user = User.find_by(email: user_params["email"]).try(:authenticate, user_params["password"])
 
     if user
-      user.gen_token
+      user.generate_token
       user.save
       render json: {
         user: user
       }
     else
-      render json: { status: 401 }
+      render json: { status: 401 }, status: 401
     end
   end
 
   def user_params
-    params.require("user").permit("name", "email", "password", "password_confirmation")
+    params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
 end
